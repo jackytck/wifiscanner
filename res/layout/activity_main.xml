@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <Spinner
+        android:id="@+id/spinner_station"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/stations"
+        android:paddingTop="15dp" 
+        android:paddingBottom="15dp"
+        />
+
+    <EditText
+        android:id="@+id/input_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/input_location" >
+    </EditText>
+    
+    <fragment
+        android:id="@+id/measurement_list"
+        android:name="android.support.v4.app.ListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+	    <Button
+	        android:id="@+id/button_start"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:text="@string/record_start"
+	        android:layout_weight="1"
+	        android:onClick="startRecording" />
+
+	    <Button
+	        android:id="@+id/button_stop"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+	        android:enabled="false"
+	        android:text="@string/record_stop" 
+	        android:onClick="stopRecording"/>
+
+</LinearLayout>
+	        
+</LinearLayout>

@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jackytck.wifiscanner.MainActivity" >
+
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never"/>
+    
+    <item
+        android:id="@+id/action_export_csv"
+        android:orderInCategory="100"
+        android:title="@string/action_export_csv"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_share_csv"
+        android:orderInCategory="100"
+        android:title="@string/action_share_csv"
+        app:showAsAction="never"/>
+</menu>
