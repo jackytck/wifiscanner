@@ -11,11 +11,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,8 +47,10 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
 	//private Measurement m_last_measurement;
 	private boolean m_recording = false;
 	private Spinner m_spinner;
-	private EditText m_input_location;
+	private EditText m_edittext_location;
 	private String m_selected_station = "";
+	private Button m_button_start, m_button_stop;
+	private CountDownTimer m_timmer;
 	private FingerPrintDbAdapter m_db_adapter = new FingerPrintDbAdapter(this);
 
 	/** 
@@ -53,7 +61,7 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
         	m_wifi_service = ((WifiSniffer.LocalBinder) service).getService();
-            locate();
+            //forceStartScanning();
         }
 
         @Override
@@ -85,8 +93,13 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
             	Log.d(TAG, r.getSsid()+": "+r.getBssid()+": "+r.getType()+": "+r.getRssi());
             	Log.d(TAG, "#################");
             	
-            	if(m_recording)
-            		m_db_adapter.insert(m_selected_station, r.getSsid(), r.getBssid(), r.getRssi(), r.isWepEnabled(), r.isInfrastructure());
+            	if(m_recording) {
+            		String location = m_edittext_location.getText().toString();
+            		if(location.length() == 0)
+            			location = m_selected_station;
+            		m_db_adapter.insert(location, r.getSsid(), r.getBssid(), r.getRssi(), r.isWepEnabled(), r.isInfrastructure());
+           
+            	}
             }
             if(m_recording) {
             	String log = results.size() + " row";
@@ -114,16 +127,50 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
 		m_scan_list.setListAdapter(adapter);
 		
 		if (savedInstanceState == null) {
-			//todo: load back the last measurement
 		}
-		startWifiSniffer();
+		//startWifiSniffer();
 		openDatabase();
 		
 		m_spinner = (Spinner) findViewById(R.id.spinner_station);
 		m_spinner.setOnItemSelectedListener(this);
 		
-		m_input_location = (EditText) findViewById(R.id.input_location);
+		m_edittext_location = (EditText) findViewById(R.id.input_location);
+		m_edittext_location.addTextChangedListener(locationWatcher);
+		
+		m_button_start = (Button) findViewById(R.id.button_start);
+		m_button_stop = (Button) findViewById(R.id.button_stop);
 	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+	    super.onConfigurationChanged(newConfig);
+	}
+	
+	private TextWatcher locationWatcher = new TextWatcher() {
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			if (s.toString().length() == 0)
+				m_button_start.setEnabled(false);
+			else
+				m_button_start.setEnabled(true);
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+				int arg3) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	
 	 private void openDatabase() {
     	if (m_db_adapter != null) {
@@ -183,6 +230,7 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
      * Starts the sniffer and registers the receiver
      */
     private void startWifiSniffer() {
+    	forceStartScanning();
         bindService(new Intent(this, WifiSniffer.class), m_wifi_connection, Context.BIND_AUTO_CREATE);
         registerReceiver(m_wifi_receiver, new IntentFilter(WifiSniffer.WIFI_ACTION));
         Log.i(TAG, "Started WifiSniffer");
@@ -206,26 +254,43 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
         }
     }
 
-    private void locate() {
+    private void forceStartScanning() {
     	if(m_wifi_service != null) {
     		m_wifi_service.forceMeasurement();
     	}
     }
     
     public void startRecording(View view) {
-    	Button start = (Button) findViewById(R.id.button_start);
-    	Button stop = (Button) findViewById(R.id.button_stop);
-    	m_recording = true;
-    	start.setEnabled(false);
-    	stop.setEnabled(true);
+    	startWifiSniffer();
+		m_recording = true;
+		view.setVisibility(View.GONE);
+		m_button_stop.setVisibility(View.VISIBLE);
+    	SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		Integer countdown = Integer.parseInt(sharedPref.getString("record_period", "30"));
+		kickAutoStop(countdown);
 	}
+    
+    public void kickAutoStop(Integer n) {
+    	m_timmer = new CountDownTimer(n * 1000, 1000) {
+
+			@Override
+			public void onFinish() {
+				stopRecording((View) m_button_stop);
+			}
+
+			@Override
+			public void onTick(long ms) {
+				m_button_stop.setText(getResources().getString(R.string.record_stop) + " (" + ms / 1000 + "s)");
+			}
+		}.start();
+    }
 
     public void stopRecording(View view) {
-    	Button start = (Button) findViewById(R.id.button_start);
-    	Button stop = (Button) findViewById(R.id.button_stop);
+    	stopWifiSniffer();
     	m_recording = false;
-    	start.setEnabled(true);
-    	stop.setEnabled(false);
+		m_timmer.cancel();
+		view.setVisibility(View.GONE);
+		m_button_start.setVisibility(View.VISIBLE);
 	}
     
     public boolean export_csv(String filename) {
@@ -250,23 +315,21 @@ public class MainActivity extends ActionBarActivity implements OnItemSelectedLis
     }
     
     public void share_csv(String filename) {
-    	File file = new File(getExternalFilesDir(null), filename);
-    	if (file.exists()) {
-    		Intent intent = new Intent(Intent.ACTION_SEND);
-    		intent.setType("text/plain"); 
-    		intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getPath()));  
-    		startActivity(Intent.createChooser(intent, getResources().getString(R.string.csv_share_via)));
-    	}
-    	else {
-    		if(export_csv(filename))
-    			share_csv(filename);
+    	if (export_csv(filename)) {
+    		File file = new File(getExternalFilesDir(null), filename);
+        	if (file.exists()) {
+        		Intent intent = new Intent(Intent.ACTION_SEND);
+        		intent.setType("text/plain"); 
+        		intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(file.getPath()));  
+        		startActivity(Intent.createChooser(intent, getResources().getString(R.string.csv_share_via)));
+        	}
     	}
     }
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
 		m_selected_station = parent.getItemAtPosition(pos).toString();
-		m_input_location.setText(m_selected_station);
+		m_edittext_location.setText(m_selected_station);
 	}
 
 	@Override

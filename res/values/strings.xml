@@ -6,14 +6,15 @@
     <string name="action_export_csv">Export CSV</string>
     <string name="action_share_csv">Share CSV</string>
     <string-array name="greeting_list">
-        <item >Scanning…</item></string-array>
+        <item ></item>
+    </string-array>
     <string name="place_holder">nat</string>
     
     <string-array name="stations">
 		<item>&#8212; 港島綫 &#8212;</item><item>上環</item><item>中環</item><item>金鐘</item><item>灣仔</item><item>銅鑼灣</item><item>天后</item><item>炮台山</item><item>北角</item><item>鰂魚涌</item><item>太古</item><item>西灣河</item><item>筲箕灣</item><item>杏花邨</item><item>柴灣</item><item>&#8212; 觀塘綫 &#8212;</item><item>油麻地</item><item>旺角</item><item>太子</item><item>石硤尾</item><item>九龍塘</item><item>樂富</item><item>黃大仙</item><item>鑽石山</item><item>彩虹</item><item>九龍灣</item><item>牛頭角</item><item>觀塘</item><item>藍田</item><item>油塘</item><item>調景嶺</item><item>&#8212; 荃灣綫 &#8212;</item><item>中環</item><item>金鐘</item><item>尖沙咀</item><item>佐敦</item><item>油麻地</item><item>旺角</item><item>太子</item><item>深水埗</item><item>長沙灣</item><item>荔枝角</item><item>美孚</item><item>荔景</item><item>葵芳</item><item>葵興</item><item>大窩口</item><item>荃灣</item><item>&#8212; 將軍澳綫 &#8212;</item><item>北角</item><item>鰂魚涌</item><item>油塘</item><item>調景嶺</item><item>將軍澳</item><item>坑口</item><item>寶琳</item><item>康城</item><item>&#8212; 東涌綫及迪士尼綫 &#8212;</item><item>香港</item><item>九龍</item><item>奧運</item><item>南昌</item><item>荔景</item><item>青衣</item><item>東涌</item><item>欣澳</item><item>迪士尼</item><item>&#8212; 東鐵綫 &#8212;</item><item>紅磡</item><item>旺角東</item><item>九龍塘</item><item>大圍</item><item>沙田</item><item>火炭</item><item>馬場</item><item>大學</item><item>大埔墟</item><item>太和</item><item>粉嶺</item><item>上水</item><item>落馬洲</item><item>羅湖</item><item>&#8212; 馬鞍山綫 &#8212;</item><item>大圍</item><item>車公廟</item><item>沙田圍</item><item>第一城</item><item>石門</item><item>大水坑</item><item>恆安</item><item>馬鞍山</item><item>烏溪沙</item><item>&#8212; 西鐵綫 &#8212;</item><item>紅磡</item><item>尖東</item><item>柯士甸</item><item>南昌</item><item>美孚</item><item>荃灣西</item><item>錦上路</item><item>元朗</item><item>朗屏</item><item>天水圍</item><item>兆康</item><item>屯門</item><item>&#8212; 機場快綫 &#8212;</item><item>香港</item><item>九龍</item><item>青衣</item><item>機場</item><item>博覽館</item>	
 	</string-array>
     
-    <string name="record_start">Start</string>
+    <string name="record_start">Scan &amp; Record</string>
     <string name="record_stop">Stop</string>
     <string name="update_interval">Update interval</string>
     <string name="update_interval_default">10</string>
@@ -35,8 +36,34 @@
         <item >30s</item>
         <item >60s</item>
     </string-array>
+    <string name="record_period">Auto-stop period</string>
+    <string name="record_period_default">60</string>
+    <string-array name="record_period_choice_values">
+        <item >10</item>
+        <item >20</item>
+        <item >30</item>
+        <item >40</item>
+        <item >50</item>
+        <item >60</item>
+        <item >120</item>
+        <item >240</item>
+        <item >480</item>
+        <item >1000</item>
+        </string-array>
+    <string-array name="record_period_choice_labels">
+        <item >10s</item>
+        <item >20s</item>
+        <item >30s</item>
+        <item >40s</item>
+        <item >50s</item>
+        <item >60s</item>
+        <item >120s</item>
+        <item >240s</item>
+        <item >480s</item>
+        <item >1000s</item>
+        </string-array>
     <string name="csv_filename">wifi_scan.csv</string>
     <string name="csv_share_via">Share via</string>
-    <string name="input_location">Input location or choose from above...</string>
+    <string name="input_location">Input location or choose from above&#8230;</string>
         
 </resources>

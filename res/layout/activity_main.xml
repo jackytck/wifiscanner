@@ -33,22 +33,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
+
 	    <Button
 	        android:id="@+id/button_start"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:text="@string/record_start"
 	        android:layout_weight="1"
-	        android:onClick="startRecording" />
+	        android:minHeight="60dip"
+	        android:onClick="startRecording"
+	        android:text="@string/record_start" />
 
 	    <Button
 	        android:id="@+id/button_stop"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:layout_weight="1"
-	        android:enabled="false"
-	        android:text="@string/record_stop" 
-	        android:onClick="stopRecording"/>
+	        android:minHeight="60dip"
+	        android:onClick="stopRecording"
+	        android:text="@string/record_stop"
+	        android:visibility="gone" />
 
 </LinearLayout>
 	        

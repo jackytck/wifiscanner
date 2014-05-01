@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <ListPreference android:key="update_interval" android:defaultValue="@string/update_interval_default" android:title="@string/update_interval" android:entryValues="@array/update_interval_choice_values" android:entries="@array/update_interval_choice_labels"/>
+    <ListPreference android:key="record_period" android:defaultValue="@string/record_period_default" android:title="@string/record_period" android:entryValues="@array/record_period_choice_values" android:entries="@array/record_period_choice_labels"/>
     
 
 </PreferenceScreen>
